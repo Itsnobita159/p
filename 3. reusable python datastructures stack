@@ -1,0 +1,45 @@
+#data_structures.py
+
+from dataclasses import dataclass, field
+from typing import Generic, TypeVar
+
+T = TypeVar("T")
+
+
+@dataclass
+class Stack(Generic[T]):
+    items: list[T] = field(default_factory=list)
+
+    def push(self, item: T) -> None:
+        self.items.append(item)
+
+    def pop(self) -> T:
+        if not self.items:
+            raise IndexError("Stack is empty")
+        return self.items.pop()
+
+
+@dataclass
+class Queue(Generic[T]):
+    items: list[T] = field(default_factory=list)
+
+    def enqueue(self, item: T) -> None:
+        self.items.append(item)
+
+    def dequeue(self) -> T:
+        if not self.items:
+            raise IndexError("Queue is empty")
+        return self.items.pop(0)
+
+#main.py
+from data_structures import Stack, Queue
+
+stack = Stack[int]()
+stack.push(10)
+stack.push(20)
+print("Stack pop:", stack.pop())
+
+queue = Queue[str]()
+queue.enqueue("A")
+queue.enqueue("B")
+print("Queue dequeue:", queue.dequeue())
