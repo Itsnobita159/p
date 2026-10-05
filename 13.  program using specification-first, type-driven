@@ -1,0 +1,71 @@
+## Specification-First and Test-First — Shopping Cart
+
+### Specification
+
+* Add products with name, price and quantity.
+* Calculate total cart price.
+* Remove products.
+* Empty cart should return total `0`.
+
+### `cart.py`
+
+```python
+from dataclasses import dataclass
+
+@dataclass
+class Product:
+    name: str
+    price: float
+    quantity: int
+
+cart: list[Product] = []
+
+def add_product(name: str, price: float, quantity: int) -> None:
+    cart.append(Product(name, price, quantity))
+
+def total() -> float:
+    return sum(p.price * p.quantity for p in cart)
+
+def remove_product(name: str) -> None:
+    cart[:] = [p for p in cart if p.name != name]
+```
+
+### `test_cart.py`
+
+```python
+from cart import *
+
+def setup_function():
+    cart.clear()
+
+def test_add_product():
+    add_product("Laptop", 50000, 2)
+    assert total() == 100000
+
+def test_multiple_products():
+    add_product("Laptop", 50000, 1)
+    add_product("Mouse", 500, 2)
+    assert total() == 51000
+
+def test_remove_product():
+    add_product("Laptop", 50000, 1)
+    remove_product("Laptop")
+    assert total() == 0
+
+def test_empty_cart():
+    assert total() == 0
+```
+
+Run:
+
+```bash
+pip install pytest
+pytest
+```
+
+**Expected:**
+
+```text
+4 passed
+```
+
