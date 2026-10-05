@@ -1,0 +1,39 @@
+# pip3 install aiohttp requests
+
+
+import asyncio
+import aiohttp
+import time
+
+urls = [
+    "https://example.com",
+    "https://www.python.org",
+    "https://www.wikipedia.org"
+]
+
+async def fetch(session, url):
+    for _ in range(3):  # retry up to 3 times
+        try:
+            async with session.get(url, timeout=10) as r:
+                return url, r.status
+        except Exception:
+            await asyncio.sleep(1)
+    return url, "Failed"
+
+async def async_crawler():
+    async with aiohttp.ClientSession() as session:
+        return await asyncio.gather(*(fetch(session, u) for u in urls))
+
+def sequential_crawler():
+    import requests
+    return [(u, requests.get(u, timeout=10).status_code) for u in urls]
+
+# Asynchronous
+start = time.perf_counter()
+print("Async:", asyncio.run(async_crawler()))
+print("Async Time:", round(time.perf_counter() - start, 2), "sec")
+
+# Sequential
+start = time.perf_counter()
+print("Sequential:", sequential_crawler())
+print("Sequential Time:", round(time.perf_counter() - start, 2), "sec")
