@@ -1,0 +1,46 @@
+from abc import ABC, abstractmethod
+from typing import Final
+
+
+class BankAccount(ABC):
+    def __init__(self, name: str, balance: float) -> None:
+        self.name: str = name
+        self.balance: float = balance
+
+    def deposit(self, amount: float) -> None:
+        self.balance += amount
+
+    @abstractmethod
+    def withdraw(self, amount: float) -> None:
+        pass
+
+
+class SavingsAccount(BankAccount):
+    MIN_BALANCE: Final[float] = 1000.0
+
+    def withdraw(self, amount: float) -> None:
+        if self.balance - amount >= self.MIN_BALANCE:
+            self.balance -= amount
+        else:
+            print("Minimum balance required")
+
+
+class CurrentAccount(BankAccount):
+    def withdraw(self, amount: float) -> None:
+        if amount <= self.balance:
+            self.balance -= amount
+        else:
+            print("Insufficient balance")
+
+
+savings: BankAccount = SavingsAccount("Ravi", 20000)
+current: BankAccount = CurrentAccount("Kiran", 30000)
+
+savings.deposit(5000)
+savings.withdraw(3000)
+
+current.deposit(10000)
+current.withdraw(5000)
+
+print("Savings:", savings.name, savings.balance)
+print("Current:", current.name, current.balance)
