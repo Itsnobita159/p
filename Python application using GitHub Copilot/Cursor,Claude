@@ -1,0 +1,67 @@
+```python
+# student_app.py
+
+students = {}
+
+def add_student(student_id: int, name: str, marks: float) -> None:
+    students[student_id] = {"name": name, "marks": marks}
+
+def find_student(student_id: int):
+    return students.get(student_id)
+
+def average_marks() -> float:
+    if not students:
+        return 0.0
+    return sum(s["marks"] for s in students.values()) / len(students)
+
+
+add_student(101, "Ravi", 85)
+add_student(102, "Kiran", 90)
+
+print("Student:", find_student(101))
+print("Average:", average_marks())
+```
+
+### Specification
+
+```text
+1. Store student ID, name and marks.
+2. Add a student.
+3. Search student by ID.
+4. Calculate average marks.
+5. Return None for an invalid ID.
+6. Handle an empty student list.
+```
+
+### AI Assistance Documentation
+
+| Stage          | AI Assistance                                            |
+| -------------- | -------------------------------------------------------- |
+| Specification  | AI helped convert requirements into clear specifications |
+| Implementation | AI generated the initial Python code                     |
+| Review         | AI suggested type hints and edge-case handling           |
+| Testing        | AI generated test cases                                  |
+| Human Review   | Code and requirements were manually verified             |
+
+### Test Code
+
+```python
+def test_add():
+    students.clear()
+    add_student(101, "Ravi", 85)
+    assert find_student(101)["name"] == "Ravi"
+
+def test_missing():
+    students.clear()
+    assert find_student(999) is None
+
+def test_average():
+    students.clear()
+    add_student(101, "Ravi", 80)
+    add_student(102, "Kiran", 90)
+    assert average_marks() == 85
+```
+
+### Inference
+
+**Specification-first development** defines requirements before coding. AI tools such as GitHub Copilot, Cursor, or Claude Code can assist with implementation, testing, and review, but the developer must manually verify the generated code. This aligns with the course practical on AI coding assistants and specification-first development. 
