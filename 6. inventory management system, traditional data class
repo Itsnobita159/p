@@ -1,0 +1,49 @@
+#inventorycode:
+
+inventory = {}
+
+def add_product(name: str, quantity: int, price: float) -> None:
+    inventory[name] = {"quantity": quantity, "price": price}
+
+def sell_product(name: str, quantity: int) -> None:
+    if name in inventory and inventory[name]["quantity"] >= quantity:
+        inventory[name]["quantity"] -= quantity
+        print("Sale successful")
+    else:
+        print("Insufficient stock")
+
+add_product("Laptop", 10, 50000)
+add_product("Mouse", 20, 500)
+
+sell_product("Laptop", 2)
+
+print("Inventory:", inventory)
+
+#dataclass code:
+from dataclasses import dataclass
+
+class StudentTraditional:
+    def __init__(self, name: str, roll_no: int, marks: float):
+        self.name = name
+        self.roll_no = roll_no
+        self.marks = marks
+
+@dataclass
+class Student:
+    name: str
+    roll_no: int
+    marks: float
+
+@dataclass
+class Employee:
+    name: str
+    employee_id: int
+    salary: float
+
+student1 = StudentTraditional("Ravi", 101, 85.5)
+student2 = Student("Ravi", 101, 85.5)
+employee = Employee("Kiran", 201, 50000)
+
+print("Traditional:", student1.name, student1.roll_no, student1.marks)
+print("Dataclass:", student2)
+print("Employee:", employee)
