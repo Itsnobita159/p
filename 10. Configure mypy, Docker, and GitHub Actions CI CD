@@ -1,0 +1,92 @@
+## Configure mypy, Docker, and GitHub Actions CI/CD
+
+For an existing small Python project, use the following setup. This matches the course practical requirement. 
+
+### 1. `app.py`
+
+```python
+def add(a: int, b: int) -> int:
+    return a + b
+
+def greet(name: str) -> str:
+    return f"Hello, {name}!"
+
+print(greet("Venkatesh"))
+print("Sum:", add(10, 20))
+```
+
+### 2. `mypy.ini`
+
+```ini
+[mypy]
+python_version = 3.11
+strict = True
+```
+
+Run:
+
+```bash
+pip install mypy
+mypy app.py
+```
+
+### 3. `Dockerfile`
+
+```dockerfile
+FROM python:3.11-slim
+WORKDIR /app
+COPY app.py .
+CMD ["python", "app.py"]
+```
+
+Build and run:
+
+```bash
+docker build -t python-app .
+docker run python-app
+```
+
+### 4. GitHub Actions CI/CD
+
+Create:
+
+```text
+.github/workflows/ci.yml
+```
+
+```yaml
+name: Python CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: pip install mypy pytest
+      - run: mypy app.py
+      - run: pytest
+```
+
+### Project Structure
+
+```text
+python-project/
+├── app.py
+├── mypy.ini
+├── Dockerfile
+└── .github/
+    └── workflows/
+        └── ci.yml
+```
+
+**Result:** `mypy` checks types, Docker packages the application, and GitHub Actions automatically runs the checks/tests whenever code is pushed or a pull request is created.
